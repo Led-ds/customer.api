@@ -7,9 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.builders.api.customer.error.CustomerExceptionHandler;
+import com.builders.api.customer.error.CustomerErrorException;
 import com.builders.api.customer.model.Customer;
 import com.builders.api.customer.repository.ICustomerRepository;
 import com.builders.api.customer.service.ICustomerBO;
@@ -34,7 +35,7 @@ public class CustomerBO implements ICustomerBO {
 		Optional<Customer> customerByDocument = repository.findByDocument(dto.getDocument());
 		
 		if(customerByDocument.isPresent()) {
-			throw new CustomerExceptionHandler("customer.entity.alread.exist.error", dto.getDocument());
+			throw new CustomerErrorException("customer.entity.alread.exist.error", HttpStatus.BAD_REQUEST);
 		}
 		
 		Customer newCustomer = repository.save(customerParser.toCustomerEntity(dto));
@@ -47,7 +48,7 @@ public class CustomerBO implements ICustomerBO {
 		Page<Customer> pages = repository.findAll(page);
 		
 		if (isNull(pages))
-			throw new CustomerExceptionHandler("customer.list.empty.error");
+			throw new CustomerErrorException("customer.list.empty.error", HttpStatus.BAD_REQUEST);
 		
 		return  pages.map(o -> customerParser.toCustomerTO(o));
 	}
@@ -59,7 +60,7 @@ public class CustomerBO implements ICustomerBO {
 		Customer updatedCustomer = repository.saveAndFlush(updatingCustomer);
 
         if (isNull(updatedCustomer))
-            throw new CustomerExceptionHandler("customer.error.update", dto.getDocument());
+            throw new CustomerErrorException("customer.error.update", HttpStatus.BAD_REQUEST);
 
         return customerParser.toCustomerTO(updatedCustomer); 
 	}

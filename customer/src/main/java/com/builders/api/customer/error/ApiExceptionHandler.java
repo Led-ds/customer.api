@@ -31,53 +31,67 @@ public class ApiExceptionHandler {
 
 	private static final String NO_MESSAGE_AVAILABLE = "No message available";
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApiExceptionHandler.class);
-	
+
 	private final MessageSource apiErrorMessageSource;
-	
+
 	public ApiError toApiError(String code, Locale locale, Object... args) {
 		String message;
 		try {
 			message = apiErrorMessageSource.getMessage(code, args, locale);
-			
+
 		}catch(NoSuchMessageException e) {
 			message = NO_MESSAGE_AVAILABLE;
 			LOGGER.error("Could not find any message for {} code under {} locale", code, locale);
 		}
-		
+
 		return new ApiError(code, message);
 	}
-	
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorResponse> handleNotValidException(MethodArgumentNotValidException ex, Locale locale){
-		
+
 		Stream<ObjectError> errors = ex.getBindingResult().getAllErrors().stream();
-		
+
 		List<ApiError> apiErrors = errors.map(ObjectError::getDefaultMessage)
-										 .map(code -> toApiError(code, locale))
-										 .collect(toList());
-		
+				.map(code -> toApiError(code, locale))
+				.collect(toList());
+
 		ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, apiErrors);
-		
+
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
-	
+
 	@ExceptionHandler(InvalidFormatException.class)
 	public ResponseEntity<ErrorResponse> handleInvalidFormatException(InvalidFormatException exception, Locale locale){
 		final String errorCode = "generic.error-1";
 		final HttpStatus status = HttpStatus.BAD_REQUEST;
 		final ErrorResponse  errorResponse = ErrorResponse.of(status, toApiError(errorCode, locale, exception.getValue()));
-		
+
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
-	
-	@ExceptionHandler(CustomerExceptionHandler.class)
-	public ResponseEntity<ErrorResponse> handleCustomerException(CustomerExceptionHandler exception, Locale locale){
-		final String errorCode = exception.getMessage();
-		final HttpStatus status = HttpStatus.BAD_REQUEST;
-		final ErrorResponse  errorResponse = ErrorResponse.of(status, toApiError(errorCode, locale, exception));
+
+
+	@ExceptionHandler(CustomerBusinessException.class) 
+	public ResponseEntity<ErrorResponse> handleCustomerException(CustomerBusinessException exception, Locale locale){
+		final String errorCode = exception.getCode(); 
+		final HttpStatus status = exception.getStauts();
 		
-		return ResponseEntity.badRequest().body(errorResponse);
+		final ErrorResponse errorResponse = ErrorResponse.of(status, toApiError(errorCode, locale, exception));
+
+		return ResponseEntity.badRequest().body(errorResponse); 
 	}
-	
-	
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponse> handleInternalServerError(Exception exception, Locale locale){
+		LOGGER.error("Error not expected", exception);
+		
+		final String errorCode = "generic.internal.error";
+		final HttpStatus status =  HttpStatus.INTERNAL_SERVER_ERROR;
+		
+		final ErrorResponse errorResponse = ErrorResponse.of(status, toApiError(errorCode, locale));
+		
+		return ResponseEntity.status(status).body(errorResponse);
+	}
+
+
 }
