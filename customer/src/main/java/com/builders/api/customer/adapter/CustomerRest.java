@@ -1,5 +1,7 @@
 package com.builders.api.customer.adapter;
 
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +41,9 @@ public class CustomerRest {
 
 	@Autowired
 	private ICustomerBO iCustomerBO;
+	
 	private final PagedResourcesAssembler<CustomerTO> pagedResourcesAssembler;
+	
 
 	@ApiOperation(value = "Create Customer", response = CustomerTO.class)
 	@ApiResponses(value = {
@@ -68,6 +74,7 @@ public class CustomerRest {
 		return iCustomerBO.edit(id, request);
 	}
 
+	
 	@ApiOperation(value = "Search Customer", response = Page.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Customers ListAll"),
@@ -75,7 +82,7 @@ public class CustomerRest {
 			@ApiResponse(code = 500, message = "Error internal server")
 	})
 	@GetMapping
-	ResponseEntity<?> list(@ApiParam("Customer Pageable")
+	public ResponseEntity<?> list(@ApiParam("Customer Pageable")
 						   @PageableDefault( sort = "id", 
 						   					 direction = Sort.Direction.DESC, 
 						   					 page = 0, 
@@ -85,5 +92,14 @@ public class CustomerRest {
 
 		return new ResponseEntity<>(pagedResourcesAssembler.toModel(listCustomer), HttpStatus.OK);
 	}
+	
+	@GetMapping("/filter")
+	public List<CustomerTO> findByFilter(@RequestParam(required = false) String key){
+		
+		List<CustomerTO> listCustomerFilter = iCustomerBO.findByFilter(key);
+		
+		return listCustomerFilter;
+	}
+	
 
 }

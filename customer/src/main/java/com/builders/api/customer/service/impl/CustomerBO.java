@@ -2,6 +2,8 @@ package com.builders.api.customer.service.impl;
 
 import static java.util.Objects.isNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +85,27 @@ public class CustomerBO implements ICustomerBO {
 		if(!ValidateDocument.isEmailValid(dto.getEmail())) {
 			throw new CustomerErrorException("customer.document.email.not.valid", HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@Override
+	public List<CustomerTO> findByFilter(String key) {
+		
+		if(isNull(key) || key.isEmpty())
+			throw new CustomerErrorException("customer.filter.empty.error", HttpStatus.BAD_REQUEST);
+		
+		List<Customer> pages = repository.findByFilter(key);
+		
+		if (isNull(pages))
+			throw new CustomerErrorException("customer.list.empty.error", HttpStatus.BAD_REQUEST);
+		
+		List<CustomerTO> listTO = new ArrayList<CustomerTO>();
+		
+		pages.forEach(o -> {
+			CustomerTO to = customerParser.toCustomerTO(o);
+			listTO.add(to);
+		});
+		
+		return listTO;
 	}
 
 }
