@@ -8,6 +8,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -21,7 +22,7 @@ public class SwaggerConfig {
     private static final String TITLE = "Customer API";
     private static final String DESCRIPTION = "Resources Customer API";
     private static final String VERSION = "0.0.1";
-    private static final String REGEX = "/.*";
+    private static final String REGEX = "/customer.*";
 
     @Bean
     public Docket api() {
@@ -39,6 +40,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title(TITLE)
                 .description(DESCRIPTION)
+                .contact(new Contact("Alex Soares", "https://www.linkedin.com/in/alex-soares-a877b256/", "alexsaosilva@gmail.com"))
                 .version(VERSION)
                 .build();
     }

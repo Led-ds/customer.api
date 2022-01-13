@@ -75,7 +75,7 @@ public class CustomerRest {
 	}
 
 	
-	@ApiOperation(value = "Search Customer", response = Page.class)
+	@ApiOperation(value = "Search all Customers", response = Page.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Customers ListAll"),
 			@ApiResponse(code = 400, message = "Invalid data Customer"),
@@ -93,6 +93,12 @@ public class CustomerRest {
 		return new ResponseEntity<>(pagedResourcesAssembler.toModel(listCustomer), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "Search by Customers according to the filter ", response = Page.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Customers by Filter"),
+			@ApiResponse(code = 400, message = "Invalid data Customer"),
+			@ApiResponse(code = 500, message = "Error internal server")
+	})
 	@GetMapping("/filter")
 	public List<CustomerTO> findByFilter(@RequestParam(required = false) String key){
 		
