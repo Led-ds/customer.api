@@ -121,8 +121,11 @@
 			<version>1.4</version>
 		</dependency>
 
-
-
+		<dependency>
+			<groupId>com.spotify</groupId>
+			<artifactId>dockerfile-maven-plugin</artifactId>
+			<version>1.4.7</version>
+		</dependency>
 
 	</dependencies>
 
@@ -131,6 +134,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<excludes>
 						<exclude>
@@ -140,6 +150,14 @@
 					</excludes>
 
 					<excludeDevtools>false</excludeDevtools>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.7</version>
+				<configuration>
+					<repository>alexssilva/${project.artifactId}-app</repository>
 				</configuration>
 			</plugin>
 		</plugins>
