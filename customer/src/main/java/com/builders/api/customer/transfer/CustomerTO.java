@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "name", "documentType", "document", "email", "dateBith"})
+@JsonPropertyOrder({"id", "name", "documentType", "document", "email", "dateBith", "age"})
 public class CustomerTO implements Serializable {
 
 	private Long id;
@@ -31,5 +31,7 @@ public class CustomerTO implements Serializable {
 	private String email;
 	
 	private String dateBith;
+	
+	private int age;
 	
 }

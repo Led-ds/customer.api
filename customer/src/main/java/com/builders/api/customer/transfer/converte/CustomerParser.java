@@ -9,6 +9,7 @@ import com.builders.api.customer.model.Customer;
 import com.builders.api.customer.model.DocumentType;
 import com.builders.api.customer.transfer.CustomerDTO;
 import com.builders.api.customer.transfer.CustomerTO;
+import com.builders.api.customer.util.CurrentAge;
 
 @Component
 public class CustomerParser {
@@ -36,6 +37,7 @@ public class CustomerParser {
                 .document(entity.getDocument())
                 .email(entity.getEmail())
                 .dateBith(entity.getBirthday().format(formatter))
+                .age(CurrentAge.age(entity.getBirthday()))
                 .build();
     }
 	
