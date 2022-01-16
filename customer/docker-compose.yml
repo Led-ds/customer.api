@@ -1,23 +1,19 @@
-version: '3.1'
+version: '3'
 services:
-  app:
-    image: 'alexssilva/customer-app:latest'
+ docker-app:
+    image: customer-app:latest
     ports:
       - "8080:8080"
-    build:
-      context: .
-    container_name: app
     depends_on:
-      - PostgreSQL
+      - docker-postgres
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/builders_customer
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://docker-postgres:5432/builders_customer
       - SPRING_DATASOURCE_USERNAME=builders
       - SPRING_DATASOURCE_PASSWORD=builders
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-          
-  PostgreSQL:
-    image: 'postgres:14.0-alpine'
-    container_name: postgredb
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update  
+ docker-postgres:
+    image: postgres:14.0-alpine
     environment:
+      - POSTGRES_DB=builders_customer
       - POSTGRES_USER=builders
       - POSTGRES_PASSWORD=builders
