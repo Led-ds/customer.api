@@ -1,0 +1,15 @@
+---
+- name: Ensure Docker is installed
+  hosts: all
+  remote_user: ec2-user #usuário do EC2
+  gather_facts: false #Não recuperar informações do ambiente
+  become: true #Habilitar o super-user antes de executar os comandos
+  tasks:
+    - name: Install Docker
+      yum: name=docker
+
+    - name: Ensure docker service is started
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
