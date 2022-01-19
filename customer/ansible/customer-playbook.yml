@@ -51,13 +51,12 @@
 
     - name: Create Portainer Service
       command: docker service create 
-        --detach=false 
-        --name portainer 
-        --publish 9000:9000
-        --constraint 'node.role == manager' 
-        --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock 
-        --mount type=bind,src=/home/ec2-user/.portainer/data,dst=/data portainer/portainer
-      when: portainer_started.stdout == "0"
+       --detach=false 
+       --name portainer 
+       --publish 9000:9000
+       --constraint 'node-role == manager' 
+       --mount type=bind,src=/var/run/docker.sock,dst=var/run/docker.sock
+       --mount type=bind,src=/home/ec2-user/.portainer/data,dst=/data portainer/portainer
 
 - name: Join Swarm Cluster
   hosts: manager-follower
