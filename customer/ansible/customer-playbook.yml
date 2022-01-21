@@ -1,6 +1,6 @@
 ---
 - name: Ensure Docker is installed
-  hosts: All # todos servidores EC2
+  hosts: all # todos servidores EC2
   remote_user: ec2-user #usuário do EC2
   gather_facts: false #Não recuperar informações do ambiente
   become: true #Habilitar o super-user antes de executar os comandos
@@ -50,13 +50,8 @@
       register: portainer_started
 
     - name: Create Portainer Service
-      command: docker service create 
-       --detach=false 
-       --name portainer 
-       --publish 9000:9000
-       --constraint 'node-role == manager' 
-       --mount type=bind,src=/var/run/docker.sock,dst=var/run/docker.sock
-       --mount type=bind,src=/home/ec2-user/.portainer/data,dst=/data portainer/portainer
+      command: docker service create --detach=false --name portainer --publish 9000:9000 --constraint 'node.role == manager' --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock --mount type=bind,src=/home/ec2-user/.portainer/data,dst=/data portainer/portainer
+      when: portainer_started.stdout == "0"
 
 - name: Join Swarm Cluster
   hosts: manager-follower

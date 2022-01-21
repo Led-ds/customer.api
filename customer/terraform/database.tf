@@ -21,6 +21,6 @@ module "rds" {
   multi_az = "false"
   family = "postgres10"
 
-  subnet_ids = "${flatten(chunklist(aws_subnet.private_subnet.*.id, 1))}"
+  subnet_ids = "${flatten(chunklist(aws_subnet.private_subnet.*.id, 1))}" #Será criado em redes private
 
 }

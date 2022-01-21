@@ -1,27 +1,30 @@
-resource "aws_vpc" "main" {
+resource "aws_vpc" "main" {     #Provisionando VPC
   cidr_block = "192.168.0.0/16"
+  tags = {
+    Name = "Builders@VPC"
+  }
 }
 
-resource "aws_subnet" "private_subnet" {
+resource "aws_subnet" "private_subnet" { #Provisionando SUB_VPC PRIVATE By Main
   count = 3
   
   vpc_id = "${aws_vpc.main.id}"
   
-  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + 10)}"
+  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + 10)}" #Ouput example:  192.168.10.0/24 in the first iteration
   
-  availability_zone = "${var.availability_zones[count.index]}"
+  availability_zone = "${var.availability_zones[count.index]}" #Zonas de Disponibilidades
 
   tags = { Name = "builders_vpc_private_subnet_${count.index}"}
 }
 
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnet" { #Provisionando SUB_VPC PUBLIC By Main
   count = 3
 
   vpc_id = "${aws_vpc.main.id}"
 
   cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + 20)}"
 
-  availability_zone = "${var.availability_zones[count.index]}"
+  availability_zone = "${var.availability_zones[count.index]}" #Zonas de Disponibilidades
 
   map_public_ip_on_launch = true
 

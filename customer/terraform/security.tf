@@ -18,7 +18,7 @@ resource "aws_security_group" "database" {
     from_port = 5432
     protocol  = "tcp"
     to_port   = 5432
-    self = true
+    self = true #Cria um security group liberando a porta 5432 apenas para quem tiver o "* database *"
   }
 }
 
