@@ -53,9 +53,7 @@ public class CustomerRest {
 	})
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CustomerTO create(@ApiParam(value = "Customer apply", required = true)
-	@Valid @RequestBody CustomerDTO request) {
-
+	public CustomerTO create(@ApiParam(value = "Customer apply", required = true) @Valid @RequestBody CustomerDTO request) {
 		return iCustomerBO.save(request);
 	}
 
@@ -68,8 +66,8 @@ public class CustomerRest {
 	})
 	@PutMapping("/{id}")
 	public CustomerTO update(@ApiParam(value = "Customer Update", required = true)
-	@PathVariable("id") @NotNull(message = "{attribute.id.mandatory}") final Long id, 
-	@Valid @RequestBody final CustomerDTO request) {
+							 @PathVariable("id")@NotNull(message = "{attribute.id.mandatory}") final Long id,
+							 @Valid @RequestBody final CustomerDTO request) {
 
 		return iCustomerBO.edit(id, request);
 	}
@@ -82,11 +80,10 @@ public class CustomerRest {
 			@ApiResponse(code = 500, message = "Error internal server")
 	})
 	@GetMapping
-	public ResponseEntity<?> list(@ApiParam("Customer Pageable")
-						   @PageableDefault( sort = "id", 
-						   					 direction = Sort.Direction.DESC, 
-						   					 page = 0, 
-						   					 size = 10) final Pageable page){
+	public ResponseEntity<?> list(@ApiParam("Customer Pageable") @PageableDefault( sort = "id",
+																				   direction = Sort.Direction.DESC,
+						   					 									   page = 0,
+						   					 									   size = 10) final Pageable page){
 
 		Page<CustomerTO> listCustomer = iCustomerBO.listAll(page);
 
