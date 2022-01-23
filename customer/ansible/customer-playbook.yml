@@ -39,12 +39,12 @@
       when: swarm_mode.stdout == "active"
       register: master_token
 
-    - shell: "docker network ls | grep service c | { grep -v grep || true; }"
+    - shell: "docker network ls | grep service_net_customer -c | { grep -v grep || true; }"
       register: overlay_network_created
 
     - name: Create service overlay network
-      command: docker network create --driver overlay --subnet 10.0.0.0/16 service
-      when: overlay_network_created == "0"
+      command: docker network create -d overlay --subnet 10.0.0.0/16 service_net_customer
+      when: overlay_network_created != "0"
 
     - shell: "docker service ls | grep -i portainer | wc -l"
       register: portainer_started
@@ -59,8 +59,8 @@
   gather_facts: false
   become: true
   vars:
-    token: "{{ hostvars[groups['manager-leader'][0]]['master_token']['stdout'] }}"
-    master: "{{ hostvars[groups['manager-leader'][0]]['private_ip'] }}"
+    token: "{{hostvars[groups['manager-leader'][0]]['master_token']['stdout']}}"
+    master: "{{hostvars[groups['manager-leader'][0]]['private_ip'] }}"
   tasks:
     - shell: "docker info | grep 'Swarm' | awk -F'Swarm: ' '{print $NF}'"
       register: swarm_mode

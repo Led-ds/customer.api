@@ -16,7 +16,8 @@ resource "aws_instance" "instances" {
   vpc_security_group_ids = ["${aws_security_group.allow_ssh.id}",
                             "${aws_security_group.allow_outbound.id}",
                             "${aws_security_group.cluster_communication.id}",
-                            "${aws_security_group.allow_portainer.id}" ]
+                            "${aws_security_group.allow_portainer.id}",
+                             "${aws_security_group.database.id}"]
 
   tags = {Name = "builders_instances"}
 }

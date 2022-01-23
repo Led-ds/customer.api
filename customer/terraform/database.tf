@@ -8,7 +8,7 @@ module "rds" {
   instance_class    = "db.t2.micro"
   allocated_storage = "100"
 
-  name     = "builders_customer"
+  name     = "builders"
   username = "builders"
   password = "builders"
   port     = "5432"
