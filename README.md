@@ -14,6 +14,11 @@ Cadastrar, alterar, listar por paginação ou buscar por dado(s) específico(s) 
 - Docker
 - Maven
 - Cloud AWS
+    - EC2
+    - VPC
+    - RDS (to postgresql)
+    - S3 (Bucket)
+    - IAM (Create user access) 
 
 
 # Providing Cloud AWS - IaC (Infrastructure as Code)
@@ -37,4 +42,4 @@ Cadastrar, alterar, listar por paginação ou buscar por dado(s) específico(s) 
 
 - Pagina do Swagger no ar, Aplicação funcionando;
 
-- Para testar a API foi disponibilizado uma collection dentro do diretório postman no projeto. 
+- Para testar a API foi disponibilizado uma collection dentro do diretório /documents/postman/ no projeto. 
