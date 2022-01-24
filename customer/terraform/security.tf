@@ -1,3 +1,4 @@
+#Regra para liberar acesso as intancias via SSH com ip address public
 resource "aws_security_group" "allow_ssh" {
   vpc_id = aws_vpc.main.id
   name = "builders_allow_ssh"
@@ -10,6 +11,7 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
+#Cria um security group liberando a porta 5432 apenas para quem tiver o "* database *"
 resource "aws_security_group" "database" {
   vpc_id = aws_vpc.main.id
   name = "builders_database"
@@ -18,10 +20,11 @@ resource "aws_security_group" "database" {
     from_port = 5432
     protocol  = "tcp"
     to_port   = 5432
-    self = true #Cria um security group liberando a porta 5432 apenas para quem tiver o "* database *"
+    self = true
   }
 }
 
+#Regra de saída para qualquer protocolo e porta
 resource "aws_security_group" "allow_outbound" {
   vpc_id = "${aws_vpc.main.id}"
   name = "builders_allow_outbound"

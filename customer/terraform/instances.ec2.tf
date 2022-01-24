@@ -1,7 +1,9 @@
+#Iniciando variavel com o valor da chave publica
 resource "aws_key_pair" "keypair"{
   public_key = "${file("key/builders_key.pub")}" #Getting public key
 }
 
+#Provisionando as Instances na AWS para suas respectivas sub_nets publicas
 resource "aws_instance" "instances" {
   count = 3
 
@@ -9,9 +11,9 @@ resource "aws_instance" "instances" {
 
   instance_type = "t2.micro"
 
-  subnet_id = "${element(aws_subnet.public_subnet.*.id, count.index)}" #Provisionando instance para cada SubNet
+  subnet_id = "${element(aws_subnet.public_subnet.*.id, count.index)}" #Setting para cada SubNet Publica
 
-  key_name = "${aws_key_pair.keypair.key_name}" #Associando as Keys com as Instances
+  key_name = "${aws_key_pair.keypair.key_name}" #Associando as KeysPublic com as Instances
 
   vpc_security_group_ids = ["${aws_security_group.allow_ssh.id}",
                             "${aws_security_group.allow_outbound.id}",
@@ -39,6 +41,7 @@ resource "local_file" "hosts" {
   filename = "./hosts"
 }
 
+#Print result IPs Public in console output
 output "public_ips" {
-  value = "${join(", ", aws_instance.instances.*.public_ip)}" #Print result IPs Public in console output
+  value = "${join(", ", aws_instance.instances.*.public_ip)}"
 }
