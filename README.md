@@ -1,7 +1,6 @@
 # Customer Api
 API responsável por manter dados do Cliente. 
-Cadastrar, alterar, listar por paginação ou buscar por dado(s) específico(s) são funções provisionadas pela api. Acesso API: http://3.83.78.65:8080/customer
-
+Cadastrar, alterar, listar por paginação ou buscar por dado(s) específico(s) são funções provisionadas pela api.
 # Technology
 - Java8
 - SpringBoot
